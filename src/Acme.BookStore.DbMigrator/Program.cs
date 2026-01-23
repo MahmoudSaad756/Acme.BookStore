@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,13 @@ class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((context, config) =>
+                {
+                    // Load the main appsettings.json
+                    config.AddJsonFile(Path.Combine(AppContext.BaseDirectory, "appsettings.json"), optional: false, reloadOnChange: true)
+                        .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: true)
+                        .AddEnvironmentVariables(); // Optional: allow env variable overrides
+                })
             .AddAppSettingsSecretsJson()
             .ConfigureLogging((context, logging) => logging.ClearProviders())
             .ConfigureServices((hostContext, services) =>

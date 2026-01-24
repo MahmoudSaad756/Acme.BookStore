@@ -14,17 +14,20 @@ $(function () {
             columnDefs: [
                 {
                     title: l('Actions'),
+                    visible: abp.auth.isGranted('BookStore.Books.Edit') && abp.auth.isGranted('BookStore.Books.Delete'),
                     rowAction: {
                         items:
                             [
                                 {
                                     text: l('Edit'),
+                                    visible: abp.auth.isGranted('BookStore.Books.Edit'),
                                     action: function (data) {
                                         editModal.open({ id: data.record.id });
                                     }
                                 },
                                 {
                                     text: l('Delete'),
+                                    visible: abp.auth.isGranted('BookStore.Books.Delete'),
                                     confirmMessage: function (data) {
                                         return l('BookDeletionConfirmationMessage', data.record.name);
                                     },
